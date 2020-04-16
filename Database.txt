@@ -1,0 +1,125 @@
+--------------------------------------Flower-------------------------------------
+CREATE TABLE Flower
+(
+  Id INT IDENTITY(1,1) NOT NULL,
+  Name VARCHAR(50) NOT NULL,
+  PRIMARY KEY (Id)
+);
+---------------------------------------------------------------------------------
+------------------------------------Plantation-----------------------------------
+CREATE TABLE Plantation
+(
+  Id INT IDENTITY(1,1) NOT NULL,
+  Name VARCHAR(50) NOT NULL,
+  Adress VARCHAR(50) NOT NULL,
+  PRIMARY KEY (Id)
+);
+---------------------------------------------------------------------------------
+-------------------------------------Warehouse-----------------------------------
+CREATE TABLE Warehouse
+(
+  Id INT IDENTITY(1,1) NOT NULL,
+  Name VARCHAR(50) NOT NULL,
+  Adress VARCHAR(50) NOT NULL,
+  PRIMARY KEY (Id)
+);
+---------------------------------------------------------------------------------
+----------------------------------PlantationFlower-------------------------------
+CREATE TABLE PlantationFlower
+(
+  FlowerId INT NOT NULL,
+  PlantationId INT NOT NULL,
+  Amount INT NOT NULL
+);
+
+ALTER TABLE [dbo].[PlantationFlower]
+     ADD CONSTRAINT FK_PlantationFlower1 FOREIGN KEY(FlowerId)
+	REFERENCES [dbo].[Flower].[Id]
+	ON DELETE CASCADE
+        ON UPDATE CASCADE
+;
+ALTER TABLE [dbo].[PlantationFlower]
+     ADD CONSTRAINT FK_PlantationFlower2 FOREIGN KEY(PlantationId)
+	REFERENCES [dbo].[Plantation].[Id]
+	ON DELETE CASCADE
+        ON UPDATE CASCADE
+;
+ALTER TABLE [dbo].[PlantationFlower]
+     ADD PRIMARY KEY(FlowerId,PlantationId)
+;
+---------------------------------------------------------------------------------
+---------------------------------WarehouseFlower---------------------------------
+CREATE TABLE WarehouseFlower
+(  
+  FlowerId INT NOT NULL,
+  WarehouseId INT NOT NULL,
+  Amount INT NOT NULL
+);
+ALTER TABLE [dbo].[WarehouseFlower]
+     ADD CONSTRAINT FK_WarehouseFlower1 FOREIGN KEY(FlowerId)
+	REFERENCES [dbo].[Flower].[Id]
+	ON DELETE CASCADE
+        ON UPDATE CASCADE
+;
+ALTER TABLE [dbo].[WarehouseFlower]
+     ADD CONSTRAINT FK_WarehouseFlower2 FOREIGN KEY(WarehouseIdId)
+	REFERENCES [dbo].[Warehouse].[Id]
+	ON DELETE CASCADE
+        ON UPDATE CASCADE
+;
+ALTER TABLE [dbo].[WarehouseFlower]
+     ADD PRIMARY KEY(FlowerId,WarehouseId)
+;
+---------------------------------------------------------------------------------
+---------------------------------------Supply------------------------------------
+CREATE TABLE Supply
+(
+  Id INT IDENTITY(1,1) NOT NULL,
+  ScheduledDate DATE NOT NULL,
+  ClosedDate DATE NOT NULL,
+  Status VARCHAR(50) NOT NULL,
+  PlantationId INT NOT NULL,
+  WarehouseId INT NOT NULL,
+);
+
+ALTER TABLE [dbo].[Supply]
+     ADD CONSTRAINT FK_Supply1 FOREIGN KEY(PlantationId)
+	REFERENCES [dbo].[Plantation].[Id]
+	ON DELETE CASCADE
+        ON UPDATE CASCADE
+;
+ALTER TABLE [dbo].[Supply]
+     ADD CONSTRAINT FK_Supply2 FOREIGN KEY(WarehouseId)
+	REFERENCES [dbo].[Warehouse].[Id]
+	ON DELETE CASCADE
+        ON UPDATE CASCADE
+;
+ALTER TABLE [dbo].[Supply]
+     ADD PRIMARY KEY (Id)
+;
+---------------------------------------------------------------------------------
+---------------------------------SupplyFlower------------------------------------
+CREATE TABLE SupplyFlower
+(
+  FlowerId INT NOT NULL,
+  SupplyId INT NOT NULL,
+  Amount INT NOT NULL
+);
+
+ALTER TABLE [dbo].[SupplyFlower]
+     ADD CONSTRAINT FK_SupplyFlower1 FOREIGN KEY(FlowerId)
+	REFERENCES [dbo].[Flower].[Id]
+	ON DELETE CASCADE
+        ON UPDATE CASCADE
+;
+ALTER TABLE [dbo].[SupplyFlower]
+     ADD CONSTRAINT FK_SupplyFlower2 FOREIGN KEY(SupplyId)
+	REFERENCES [dbo].[Supply].[Id]
+	ON DELETE CASCADE
+        ON UPDATE CASCADE
+;
+ALTER TABLE [dbo].[SupplyFlower]
+     ADD PRIMARY KEY (FlowerId,SupplyId)
+;
+---------------------------------------------------------------------------------
+	

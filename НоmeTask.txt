@@ -1,0 +1,78 @@
+---------------------------------------SELECT---------------------------------------
+1)SELECT [Name]
+  FROM [HomeTask].[dbo].[Plantation]
+
+2)SELECT [dbo].[Plantation].[Id] as "Plantation ID",
+       [dbo].[Plantation].[Name] as "Plantation NAME",
+	   [dbo].[PlantationFlower].[Amount] as "Count of variable",
+	   [dbo].[Flower].[Name] as "Flower NAME"
+FROM [dbo].[PlantationFlower],[dbo].[Plantation],[dbo].[Flower]
+	WHERE [dbo].[PlantationFlower].[PlantationId] = [dbo].[Plantation].[Id]
+	AND [dbo].[PlantationFlower].[FlowerId] = [dbo].[Flower].[Id]
+		GROUP BY [dbo].[Plantation].[Name],[dbo].[Plantation].[Id],[dbo].[Flower].[Name],[dbo].[PlantationFlower].[Amount]
+
+3)SELECT [dbo].[Flower].[Id] as "Flower ID",
+	   [dbo].[Flower].[Name] as "Flower NAME",
+	   COUNT([dbo].[PlantationFlower].[PlantationId]) as "Plantation number"
+FROM [dbo].[Flower],[dbo].[PlantationFlower]
+	WHERE [dbo].[Flower].[Id] = [dbo].[PlantationFlower].[FlowerId]
+		GROUP BY [dbo].[Flower].[Id],[dbo].[Flower].[Name]
+
+4)SELECT [dbo].[Flower].[Id] as "Flower ID",
+	   [dbo].[Flower].[Name] as "Flower NAME",
+	   [dbo].[PlantationFlower].[PlantationId] as "Plantation number"
+FROM [dbo].[Flower],[dbo].[PlantationFlower]
+	WHERE [dbo].[Flower].[Id] = [dbo].[PlantationFlower].[FlowerId] 
+	AND [dbo].[PlantationFlower].[Amount] > 1000
+		GROUP BY [dbo].[Flower].[Id],[dbo].[Flower].[Name],[dbo].[PlantationFlower].[PlantationId] 
+
+5)SELECT [dbo].[SupplyFlower].[FlowerId] as "Flower ID",
+       [dbo].[Flower].[Name] as "Flower NAME",
+       [dbo].[SupplyFlower].[Amount] as "Count"
+FROM [dbo].[Flower],[dbo].[SupplyFlower],[dbo].[Supply]
+	WHERE [dbo].[Supply].[PlantationId] = >plantation id<
+	AND [dbo].[Flower].[Id] = [dbo].[SupplyFlower].[FlowerId]
+	AND [dbo].[SupplyFlower].[SupplyId] = [dbo].[Supply].[Id]
+		GROUP BY [dbo].[Flower].[Name],[dbo].[SupplyFlower].[Amount],[dbo].[SupplyFlower].[FlowerId]
+
+6)SELECT [dbo].[Plantation].[Id] as "Plantation ID",
+	   [dbo].[Plantation].[Name] as "Plantation NAME",
+	   [dbo].[Warehouse].[Name] as "Warehouse NAME",
+	   [dbo].[Supply].[ClosedDate] as "Closed Date"
+FROM [dbo].[Plantation],[dbo].[Warehouse],[dbo].[Supply]
+	WHERE [dbo].[Plantation].[Id] = [dbo].[Supply].[PlantationId]
+	AND [dbo].[Supply].[WarehouseId] = [dbo].[Warehouse].[Id]
+	AND [dbo].[Supply].[Status] like 'Closed'
+		GROUP BY [dbo].[Plantation].[Id],
+	         [dbo].[Plantation].[Name],
+		 [dbo].[Warehouse].[Name],
+		 [dbo].[Supply].[ClosedDate]
+-----------------------------------------------------------------------------------
+
+---------------------------------------INSERT--------------------------------------
+1)INSERT INTO [dbo].[Flower] ([dbo].[Flower].[Name])
+VALUES ('flower name...');
+
+2)INSERT INTO [dbo].[Plantation] ([dbo].[Plantation].[Name],[dbo].[Plantation].[Adress])
+VALUES ('name1...','adress1...'),('name2...','adress2...');
+-----------------------------------------------------------------------------------
+
+---------------------------------------UPDATE--------------------------------------
+1)UPDATE [dbo].[SupplyFlower]
+SET [dbo].[SupplyFlower].[Amount] = >Your amount<
+	WHERE [dbo].[SupplyFlower].[SupplyId] = >Supply ID< 
+	AND [dbo].[SupplyFlower].[FlowerId] = >Flower ID which you want update<
+-----------------------------------------------------------------------------------
+
+---------------------------------------DELETE--------------------------------------
+1)DELETE FROM [dbo].[PlantationFlower]
+	WHERE [dbo].[PlantationFlower].[PlantationId] = >Plantation ID<
+
+2)DELETE FROM [dbo].[Flower]
+	WHERE [dbo].[Flower].[Id] = >Flower ID< (Это работает только если в ALTER TABLE на вторичных ключах есть каскадное удаление !!!)
+-----------------------------------------------------------------------------------
+----------------------------------------ALTER--------------------------------------
+ALTER TABLE [dbo].[Flower]
+	ADD VariableFlower varchar(50) DEFAULT NULL 
+;
+-----------------------------------------------------------------------------------
